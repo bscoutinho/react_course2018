@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Redux</title>
+</head>
+<body>
+  <input type="text" id="todo">
+  <button onclick="addTodo()">ADD A NEW TODO</button>
+  <div id="app"></div>
+  <h1 id="counter"></h1>
+  <h1 id="counterType"></h1>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/redux-logger@3.0.6/dist/redux-logger.min.js"></script>
+  <script>
+    // FIRST PRINCIPLE => SINGLE SOURCE OF TRUTH => ONLY ONE STORE
+    // SECOND PRINCIPLE => STORE STATE IS IMMUTABLE => CANNOT BE CHANGED, BUT CAN ONLY BE REPLACED
+    // THIRD PRINCIPE => STORE STATE CAN ONLY BE REPLACED/CHANGED BY PURE FUNCTIONS CALLED REDUCERS
+    // CREATE A REDUCER
+    const ADD_NEW_TODO_TO_STORE = 'ADD_NEW_TODO_TO_STORE'
+    const reducer = (oldState = [], action) => {
+      if (action.type === 'ADD_NEW_TODO_TO_STORE') {
+        return [
+          ...oldState,
+          action.todo
+        ];
+      }
+      return oldState;
+    };
+    // CREATING A STORE
+    const store = Redux.createStore(reducer, Redux.applyMiddleware(reduxLogger.default));
+
+    const addTodoAction = todo => ({
+      type: ADD_NEW_TODO_TO_STORE,
+      todo
+    });
+
+    const addTodo  = () => {
+      const input = document.getElementById('todo');
+      store.dispatch(addTodoAction(input.value));
+    };
+
+    const renderTodos = () => {
+      const app = document.getElementById('app');
+      app.innerHTML = store.getState();
+    };
+
+    const renderCounter = () => {
+      const counter = document.getElementById('counter');
+      counter.innerHTML = store.getState().length
+    };
+
+    const renderCounterType = () => {
+      const counterType = document.getElementById('counterType');
+      counterType.innerHTML = store.getState().length % 2 === 0 ? 'EVEN NUMBER OF TODOS': 'ODD NUMBER OF TODOS';
+    };
+
+    store.subscribe(renderTodos);
+    store.subscribe(renderCounter);
+    store.subscribe(renderCounterType);    
+    
+    store.dispatch(addTodoAction('Buy some new clothes'));
+
+    store.dispatch(addTodoAction('Make my hair'));
+
+    store.dispatch({ type: 'UNKNOWN_ACTION' });
+
+  </script>
+</body>
+</html>

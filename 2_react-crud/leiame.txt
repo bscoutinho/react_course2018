@@ -1,0 +1,4 @@
+crud react com API rest (mockAip.io) e axios para fazer a API funcionar.
+deploy no netlify para rodar a aplicação online
+
+

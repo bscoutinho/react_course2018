@@ -1,0 +1,6 @@
+react com várias ferramentas:
+
+- npm install --save indicative (para validação de mensagem)
+- mockApi.io (API rest)
+- axios (para trabalhar com a Api rest)
+ 
